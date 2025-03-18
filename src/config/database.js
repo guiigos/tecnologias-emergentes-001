@@ -10,5 +10,5 @@ const config = async (url) => {
 }
 
 export default {
-  config
+  config,
 };
