@@ -8,6 +8,8 @@ import dotenv from "dotenv";
 import database from "./config/database.js";
 import routes from "./routes.js";
 
+import handler from "./middlewares/handler.js";
+
 dotenv.config();
 database.config(process.env.DATABASE);
 
@@ -19,6 +21,7 @@ app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
+app.use(handler);
 app.use(routes);
 
 export default app;

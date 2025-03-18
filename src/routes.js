@@ -6,10 +6,10 @@ import NotFound from "./routes/helper/404.js";
 import UserRouter from "./routes/userRouter.js";
 
 const api = Router()
-  .use("/user", UserRouter);
+  .use("/users/", UserRouter);
 
 const routes = Router()
-  .use("/api", api)
+  .use("/api/", api)
   .use(InternalServerError)
   .use(NotFound);
 
