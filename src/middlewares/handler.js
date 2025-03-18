@@ -5,9 +5,17 @@ export default (_, res, next) => {
     .status(httpStatus.OK)
     .json(data);
 
-  res.internal_server_error = (message) => res
+  res.created = () => res
+    .status(httpStatus.CREATED)
+    .send();
+
+  res.no_content = () => res
+    .status(httpStatus.NO_CONTENT)
+    .send();
+
+  res.internal_server_error = (data) => res
     .status(httpStatus.INTERNAL_SERVER_ERROR)
-    .json({ message });
+    .json(data);
 
   next();
 }
