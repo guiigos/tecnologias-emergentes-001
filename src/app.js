@@ -8,6 +8,7 @@ import dotenv from "dotenv";
 import database from "./config/database.js";
 import routes from "./routes.js";
 
+import hateos from "./middlewares/hateos.js";
 import handler from "./middlewares/handler.js";
 
 dotenv.config();
@@ -21,6 +22,7 @@ app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
+app.use(hateos);
 app.use(handler);
 app.use(routes);
 
