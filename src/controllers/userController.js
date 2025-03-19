@@ -1,34 +1,65 @@
 import User from "../models/userModel.js";
 
 export const showUser = async (req, res, next) => {
-  const user = await User.findOne(req.params);
+  try {
+    const user = await User.findOne(req.params);
 
-  const data = res.hateos_item(user);
-  res.ok(data);
+    const data = res.hateos_item(user);
+    res.ok(data);
+  } catch (err) {
+    next(err);
+  }
 }
 
 export const listUsers = async (req, res, next) => {
-  const users = await User.find({});
+  try {
+    const page = parseInt(req.query._page) || 1;
+    const size = parseInt(req.query._size) || 10;
 
-  const data = res.hateos_list("users", users);
-  res.ok(data);
+    const offset = (page - 1) * size;
+
+    const users = await User
+      .find({})
+      .skip(offset)
+      .limit(size);
+
+    const totalData = await User.countDocuments();
+    const totalPages = Math.ceil(totalData / size);
+
+    const data = res.hateos_list("users", users, totalPages);
+    res.ok(data);
+  } catch (err) {
+    next(err);
+  }
 }
 
 export const createUser = async (req, res, next) => {
-  await new User(req.body).save();
+  try {
+    await new User(req.body).save();
 
-  res.created();
+    res.created();
+  } catch (err) {
+    next(err);
+  }
 }
 
 export const editUser = async (req, res, next) => {
-  const user = await User.findOneAndUpdate(req.params, req.body, { new: true });
+  try {
+    const user = await User.findOneAndUpdate(req.params, req.body, { new: true });
 
-  const data = res.hateos_item(user);
-  res.ok(data);
+    const data = res.hateos_item(user);
+    res.ok(data);
+  } catch (err) {
+    next(err);
+  }
 }
 
 export const deleteUser = async (req, res, next) => {
-  await User.findByIdAndDelete(req.params._id);
+  try {
+    await User.findByIdAndDelete(req.params._id);
 
-  res.no_content();
+    res.no_content();
+  } catch (err) {
+    next(err);
+  }
 }

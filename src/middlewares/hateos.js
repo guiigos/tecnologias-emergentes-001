@@ -11,7 +11,9 @@ export default (req, res, next) => {
     }
   }
 
-  res.hateos_list = (name, data) => {
+  res.hateos_list = (name, data, totalPages) => {
+    const page = parseInt(req.query._page);
+
     return {
       [name]: data.map((item) => ({
         ...item._doc,
@@ -19,9 +21,16 @@ export default (req, res, next) => {
           { rel: "self", href: `${req.baseUrl}/${item._id}`, method: "GET" },
         ],
       })),
+      _page: {
+        current: page,
+        total: totalPages,
+        size: data.length,
+      },
       _links: [
         { rel: "self", href: req.baseUrl, method: "GET" },
-        { rel: "create", href: req.baseUrl, method: "POST" }
+        { rel: "create", href: req.baseUrl, method: "POST" },
+        { rel: "previous", href: page > 1 ? `${req.baseurl}?_page=${page - 1}` : null, method: "GET" },
+        { rel: "next", href: page < totalPages ? `${req.baseurl}?_page=${page + 1}` : null, method: "GET" },
       ],
     }
   }
